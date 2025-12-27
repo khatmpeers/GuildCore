@@ -31,6 +31,4 @@ mod request {
         pub description: String,
         pub uid: String
     }
-
-    
 }
