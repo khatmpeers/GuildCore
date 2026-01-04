@@ -1,7 +1,16 @@
 [package]
 name = "guild_core"
 version = "0.1.0"
-edition = "2024"
+edition = "2026"
+authors = ["Khatm Peers <khatm.peers@gmail.com>"]
+license = "MIT OR Apache-2.0"
+description = ""
+repository = ""
+homepage = ""
+documentation = ""
+keywords = []
+categories = []
+readme = "README.md"
 
 [dependencies]
 actix-web = "4.12.1"
@@ -12,3 +21,6 @@ serde_json = "1.0.148"
 anyhow = "1.0.100"
 dotenv = "0.15.0"
 uuid = { version = "1.19.0", features = ["v4", "serde"] }
+
+[dev-dependencies]
+tokio-test = "0.4"
