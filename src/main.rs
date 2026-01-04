@@ -1,31 +1,27 @@
-use actix_web::{HttpResponse, Responder, get, post, web, HttpServer, App};
+use serde::{Serialize, Deserialize};
+use sqlx::SqlitePool;
+use crate::request::request::{RequestDraft, Rewardable};
 
-#[get("/")]
-async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("Hello, World!")
-}
+mod request;
+mod board;
 
-#[post("/echo")]
-async fn echo(req_body: String) -> impl Responder {
-    HttpResponse::Ok().body(req_body)
-}
+#[derive(Serialize, Deserialize)]
+struct K;
+impl Rewardable for K {}
 
-async fn manual_hello() -> impl Responder {
-    HttpResponse::Ok().body("Hello!")
-}
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+   let pool = SqlitePool::connect("sqlite:board.db").await?;
 
-#[actix_web::main]
-async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| {
-        App::new()
-            .service(
-                web::scope("/api")
-                    .service(echo)
-                    .service(hello)
-            )
-            .route("/hey", web::get().to(manual_hello))
-    })
-    .bind(("127.0.0.1", 8080))?
-    .run()
-    .await
+   let request_draft = request::request::RequestDraft::new(
+       "Sample Request",
+       "This is a sample request description.",
+       None,
+       None,
+       "client_123"
+   );
+
+   let request = RequestDraft::publish::<K>(request_draft, None, &pool).await?;
+
+   Ok(())
 }
