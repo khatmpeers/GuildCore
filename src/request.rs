@@ -7,9 +7,7 @@ use uuid::Uuid;
 use crate::board;
 
 pub trait Rewardable {
-    fn release_reward(&self) -> () {
-        ()
-    }
+    fn release_reward(&self) {}
 }
 
 pub struct RequestStub {
@@ -28,41 +26,37 @@ impl RequestStub {
         tags: Option<Vec<String>>,
         client_id: &str,
     ) -> RequestStub {
-        let labels: HashMap<String, String> = if let Some(col) = labels {
-            col
-        } else {
-            HashMap::new()
-        };
-        let tags: Vec<String> = if let Some(col) = tags { col } else { vec![] };
+        let labels: HashMap<String, String> = labels.unwrap_or_default();
+        let tags: Vec<String> = tags.unwrap_or_default();
 
         RequestStub {
             title: title.to_string(),
             description: description.to_string(),
-            labels: labels,
-            tags: tags,
+            labels,
+            tags,
             client_id: client_id.to_string(),
         }
     }
 
     pub fn to_request<T: Rewardable + Serialize + DeserializeOwned>(
-        self: Self,
+        self,
         id: Uuid,
         reward: Option<T>,
     ) -> Request<T> {
         Request {
-            id: id,
+            id,
             title: self.title,
             description: self.description,
             labels: self.labels,
             tags: self.tags,
             client_id: self.client_id,
-            reward: reward,
+            reward,
         }
     }
 
-    pub fn to_draft(self: Box<Self>, id: Uuid) -> RequestDraft {
+    pub fn to_draft(self, id: Uuid) -> RequestDraft {
         RequestDraft {
-            id: id,
+            id,
             title: self.title,
             description: self.description,
             labels: self.labels,
@@ -89,25 +83,21 @@ impl RequestDraft {
         tags: Option<Vec<String>>,
         client_id: &str,
     ) -> RequestDraft {
-        let labels: HashMap<String, String> = if let Some(col) = labels {
-            col
-        } else {
-            HashMap::new()
-        };
-        let tags: Vec<String> = if let Some(col) = tags { col } else { vec![] };
+        let labels: HashMap<String, String> = labels.unwrap_or_default();
+        let tags: Vec<String> = tags.unwrap_or_default();
 
         RequestDraft {
             id: Uuid::new_v4(),
             title: title.to_string(),
             description: description.to_string(),
-            labels: labels,
-            tags: tags,
+            labels,
+            tags,
             client_id: client_id.to_string(),
         }
     }
 
     pub async fn publish<T: Rewardable + Serialize + DeserializeOwned>(
-        self: Self,
+        self,
         reward: Option<T>,
         pool: &SqlitePool,
     ) -> anyhow::Result<Request<T>> {
@@ -118,7 +108,7 @@ impl RequestDraft {
             labels: self.labels,
             tags: self.tags,
             client_id: self.client_id,
-            reward: reward,
+            reward,
         };
 
         board::publish(pool, &request).await?;
@@ -143,7 +133,7 @@ impl<T: Rewardable + Serialize + DeserializeOwned> Request<T> {
     }
 
     pub async fn claim(
-        self: Self,
+        self,
         member_id: &str,
         pool: &SqlitePool,
     ) -> anyhow::Result<AcceptedRequest<T>> {
@@ -161,12 +151,14 @@ pub struct AcceptedRequest<T: Rewardable + Serialize + DeserializeOwned> {
 }
 
 impl<T: Rewardable + Serialize + DeserializeOwned> AcceptedRequest<T> {
-    pub async fn abandon(self: Self, pool: &SqlitePool) -> anyhow::Result<Request<T>> {
+    pub async fn abandon(self, pool: &SqlitePool) -> anyhow::Result<Request<T>> {
         board::publish(pool, &self.request).await?;
         Ok(self.request)
     }
 
-    pub fn complete(self: Self) -> () {
-        self.request.reward.as_ref().map(|r| r.release_reward());
+    pub fn complete(self) {
+        if let Some(r) = self.request.reward {
+            r.release_reward();
+        }
     }
 }

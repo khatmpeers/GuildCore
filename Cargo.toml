@@ -1,15 +1,15 @@
 [package]
 name = "guild_core"
 version = "0.1.0"
-edition = "2026"
+edition = "2024"
 authors = ["Khatm Peers <khatm.peers@gmail.com>"]
 license = "MIT OR Apache-2.0"
 description = ""
-repository = ""
-homepage = ""
-documentation = ""
-keywords = []
-categories = []
+repository = "https://github.com/khatmpeers/GuildCore"
+homepage = "https://github.com/khatmpeers/GuildCore"
+documentation = "https://docs.rs/guild-core"
+keywords = ["request", "commission", "guild", "cooperative"]
+categories = ["web-programming", "state machine"]
 readme = "README.md"
 
 [dependencies]
