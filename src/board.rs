@@ -80,11 +80,11 @@ pub async fn get_all_requests<T: Rewardable + Serialize + DeserializeOwned>(
 
     for row in rows {
         if let Some(id) = &row.id {
-            let labels = sqlx::query!("SELECT key, value FROM Labels WHERE request_id = ?", id)
+            let labels: HashMap<String, String> = sqlx::query!("SELECT key, value FROM Labels WHERE request_id = ?", id)
                 .fetch_all(pool)
                 .await?;
 
-            let tags = sqlx::query!("SELECT tag FROM Tags WHERE request_id = ?", id)
+            let tags: Vec<String> = sqlx::query!("SELECT tag FROM Tags WHERE request_id = ?", id)
                 .fetch_all(pool)
                 .await?;
 
