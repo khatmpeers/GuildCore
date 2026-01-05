@@ -92,7 +92,7 @@ impl RequestDraft {
             description: description.to_string(),
             labels,
             tags,
-            client_id: client_id,
+            client_id,
         }
     }
 
@@ -140,7 +140,7 @@ impl<T: Rewardable + Serialize + DeserializeOwned> Request<T> {
         board::delist_request(pool, &self.id).await?;
         Ok(AcceptedRequest {
             request: self,
-            member_id: member_id.clone(),
+            member_id: *member_id,
         })
     }
 
