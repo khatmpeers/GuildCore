@@ -15,7 +15,7 @@ pub struct RequestStub {
     pub description: String,
     pub labels: HashMap<String, String>,
     pub tags: Vec<String>,
-    pub client_id: String,
+    pub client_id: Uuid,
 }
 
 impl RequestStub {
@@ -24,7 +24,7 @@ impl RequestStub {
         description: &str,
         labels: Option<HashMap<String, String>>,
         tags: Option<Vec<String>>,
-        client_id: &str,
+        client_id: Uuid,
     ) -> RequestStub {
         let labels: HashMap<String, String> = labels.unwrap_or_default();
         let tags: Vec<String> = tags.unwrap_or_default();
@@ -34,7 +34,7 @@ impl RequestStub {
             description: description.to_string(),
             labels,
             tags,
-            client_id: client_id.to_string(),
+            client_id,
         }
     }
 
@@ -72,7 +72,7 @@ pub struct RequestDraft {
     pub description: String,
     pub labels: HashMap<String, String>,
     pub tags: Vec<String>,
-    pub client_id: String,
+    pub client_id: Uuid,
 }
 
 impl RequestDraft {
@@ -81,7 +81,7 @@ impl RequestDraft {
         description: &str,
         labels: Option<HashMap<String, String>>,
         tags: Option<Vec<String>>,
-        client_id: &str,
+        client_id: Uuid,
     ) -> RequestDraft {
         let labels: HashMap<String, String> = labels.unwrap_or_default();
         let tags: Vec<String> = tags.unwrap_or_default();
@@ -92,7 +92,7 @@ impl RequestDraft {
             description: description.to_string(),
             labels,
             tags,
-            client_id: client_id.to_string(),
+            client_id: client_id,
         }
     }
 
@@ -123,7 +123,7 @@ pub struct Request<T: Rewardable + Serialize + DeserializeOwned> {
     pub description: String,
     pub labels: HashMap<String, String>,
     pub tags: Vec<String>,
-    pub client_id: String,
+    pub client_id: Uuid,
     pub reward: Option<T>,
 }
 
@@ -134,20 +134,24 @@ impl<T: Rewardable + Serialize + DeserializeOwned> Request<T> {
 
     pub async fn claim(
         self,
-        member_id: &str,
+        member_id: &Uuid,
         pool: &SqlitePool,
     ) -> anyhow::Result<AcceptedRequest<T>> {
         board::delist_request(pool, &self.id).await?;
         Ok(AcceptedRequest {
             request: self,
-            member_id: member_id.to_string(),
+            member_id: member_id.clone(),
         })
+    }
+
+    pub async fn delist(self, pool: &SqlitePool) -> anyhow::Result<()> {
+        board::delist_request(pool, &self.id).await
     }
 }
 
 pub struct AcceptedRequest<T: Rewardable + Serialize + DeserializeOwned> {
     pub request: Request<T>,
-    pub member_id: String,
+    pub member_id: Uuid,
 }
 
 impl<T: Rewardable + Serialize + DeserializeOwned> AcceptedRequest<T> {

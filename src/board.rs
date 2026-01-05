@@ -18,7 +18,7 @@ pub async fn publish<T: Rewardable + Serialize + DeserializeOwned>(
 
     let id = request.get_id().to_string();
     let title = &request.title;
-    let client_id = &request.client_id;
+    let client_id = &request.client_id.to_string();
     let description = &request.description;
 
     sqlx::query!(
@@ -93,12 +93,14 @@ pub async fn get_all_requests<T: Rewardable + Serialize + DeserializeOwned>(
 
             let tags: Vec<String> = tags.into_iter().map(|r| r.tag).collect();
 
+            let client_id = Uuid::parse_str(&row.client_id)?;
+
             let request_stub = RequestStub::new(
                 &row.title,
                 &row.description,
                 Some(labels),
                 Some(tags),
-                &row.client_id,
+                client_id,
             );
 
             let reward = row
