@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT key, value FROM Labels WHERE request_id = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "key",
+        "ordinal": 0,
+        "type_info": "Text"
+      },
+      {
+        "name": "value",
+        "ordinal": 1,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "e111880d5e12f61c831d3464451c1a534075501a1ce66bf2b5481f7e641b3200"
+}

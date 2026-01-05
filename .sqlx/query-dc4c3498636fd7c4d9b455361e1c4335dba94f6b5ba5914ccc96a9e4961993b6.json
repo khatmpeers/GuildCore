@@ -1,0 +1,44 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT id, title, description, reward, client_id FROM Requests",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Text"
+      },
+      {
+        "name": "title",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "description",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "reward",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "client_id",
+        "ordinal": 4,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      true,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "dc4c3498636fd7c4d9b455361e1c4335dba94f6b5ba5914ccc96a9e4961993b6"
+}

@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO Labels (request_id, key, value) VALUES (?, ?, ?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": []
+  },
+  "hash": "d34697e8f561ff9601983a72a96cbb1b108173e4c50b88976b7b883c1ae25238"
+}
