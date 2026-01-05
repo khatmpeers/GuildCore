@@ -11,6 +11,14 @@ documentation = "https://docs.rs/guild-core"
 keywords = ["request", "commission", "guild", "cooperative"]
 categories = ["web-programming", "state machine"]
 readme = "README.md"
+include = [
+    "src/**/*",
+    "migrations/**/*",
+    "Cargo.toml",
+    "README.md",
+    "LICENSE-MIT",
+    "LICENSE-APACHE",
+]
 
 [dependencies]
 sqlx = { version = "0.8", features = ["runtime-tokio", "sqlite"] }
