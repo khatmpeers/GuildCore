@@ -9,7 +9,7 @@ repository = "https://github.com/khatmpeers/GuildCore"
 homepage = "https://github.com/khatmpeers/GuildCore"
 documentation = "https://docs.rs/guild-core"
 keywords = ["request", "commission", "guild", "cooperative"]
-categories = ["web-programming", "state machine"]
+categories = ["web-programming"]
 readme = "README.md"
 include = [
     "src/**/*",
