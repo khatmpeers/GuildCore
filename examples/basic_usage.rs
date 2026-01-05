@@ -1,6 +1,7 @@
 use guild_core::request::{RequestDraft, Rewardable};
 use serde::{Deserialize, Serialize};
 use sqlx::SqlitePool;
+use uuid::Uuid;
 
 #[derive(Serialize, Deserialize)]
 struct K;
@@ -15,7 +16,7 @@ async fn main() -> anyhow::Result<()> {
         "This is a sample request description.",
         None,
         None,
-        "client_123",
+        Uuid::new_v4(),
     );
 
     let request = request_draft.publish::<K>(None, &pool).await?;

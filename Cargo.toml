@@ -18,7 +18,8 @@ include = [
     "README.md",
     "LICENSE-MIT",
     "LICENSE-APACHE",
-    ".env"
+    ".env",
+    ".sqlx/**/*"
 ]
 
 [dependencies]
